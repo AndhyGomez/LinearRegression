@@ -1,0 +1,171 @@
+---
+title: "Linear Regression"
+author: "Andhy Gomez"
+date: "02/18/2021"
+output: html_document
+---
+
+```{r}
+#install.packages("corrplot")
+#install.packages("Metrics")
+#install.packages("PerformanceAnalytics")
+```
+
+
+```{r}
+# Load the tidyverse
+library(tidyverse)
+library(corrplot)
+library(Metrics)
+library(PerformanceAnalytics)
+library(ggplot2)
+```
+
+Question: What energy sources are the most responsible for CO2 Emissions
+
+```{r}
+co2NA <- read.csv('CO2North America.csv')
+structure(co2NA)
+```
+
+```{r}
+# Select only columns with numbers.
+co2Numbers <- select(co2NA, 1:4)
+
+# Display the correlation plot
+chart.Correlation(co2Numbers)
+```
+
+Model 1: Continuous
+Independent: Year
+Dependent: CO2 Emissions due to Coal
+
+```{r}
+# Create Model
+modelCoal <- lm(Coal ~ Year, data = co2NA)
+
+# Predicting the amount of Extent by 2040
+testCoal <- data.frame(Year = c(2040))
+
+# For validity testing
+testCoalVerif <- data.frame(Year = c(2010))
+
+# Predict the position with the model and test data
+predictedCoal <- predict(modelCoal, testCoalVerif)
+predictedCoalFuture <- predict(modelCoal, testCoal)
+
+RMSE1 <- rmse(testCoalVerif$Coal, predictedCoal)
+
+cat("RMSE: ", RMSE1, '\n')
+cat("The amount of CO2 emission due to Coal in 2040 will be: ", predictedCoalFuture)
+```
+
+```{r}
+plot(co2NA$Year,co2NA$Coal, xlab = "Year", ylab= "Coal", main = "CO2 Emissions by Coal", col = "dodgerblue3")
+abline(modelCoal, col = "darkorchid2", lty = 2) #regression line
+lines(lowess(co2NA$Year, co2NA$Coal), col = "darkseagreen4")
+legend(1990,1700, legend = c("Coal", "Regression", "Lowess"), col = c("dodgerblue3","darkorchid2","darkseagreen4"), lty=1:2, cex=0.8)
+```
+
+Model 2: Continuous
+Independent: Year
+Dependent: CO2 Emissions due to Oil
+```{r}
+# Create Model
+modelOil <- lm(Oil ~ Year, data = co2NA)
+
+# Predicting the amount of Extent by 2040
+testOil <- data.frame(Year = c(2040))
+
+# For validity testing
+testOilVerif <- data.frame(Year = c(2010))
+
+# Predict the position with the model and test data
+predictedOil <- predict(modelOil, testOilVerif)
+predictedOilFuture <- predict(modelOil, testOil)
+
+RMSE1 <- rmse(testOilVerif$Coal, predictedOil)
+
+cat("RMSE: ", RMSE1, '\n')
+cat("The amount of CO2 emission due to Oil in 2040 will be: ", predictedOil)
+```
+
+```{r}
+plot(co2NA$Year,co2NA$Oil, xlab = "Year", ylab= "Oil", main = "CO2 Emissions by Oil", col = "dodgerblue3")
+abline(modelOil, col = "darkorchid2", lty = 2) #regression line
+lines(lowess(co2NA$Year, co2NA$Oil), col = "darkseagreen4")
+legend(1990, 2800, legend = c("Oil", "Regression", "Lowess"), col = c("dodgerblue3","darkorchid2","darkseagreen4"), lty=1:2, cex=0.8)
+```
+Model 3: Continuous
+Independent: Year
+Dependent: CO2 Emissions due to Natural Gas
+```{r}
+# Create Model
+modelGas <- lm(Natural.gas ~ Year, data = co2NA)
+
+# Predicting the amount of Extent by 2040
+testGas <- data.frame(Year = c(2040))
+
+# For validity testing
+testGasVerif <- data.frame(Year = c(2010))
+
+# Predict the position with the model and test data
+predictedGas <- predict(modelGas, testGasVerif)
+predictedGasFuture <- predict(modelGas, testGas)
+
+RMSE1 <- rmse(testGasVerif$Coal, predictedGas)
+
+cat("RMSE: ", RMSE1, '\n')
+cat("The amount of CO2 emission due to Natural Gases in 2040 will be: ", predictedGas)
+```
+
+```{r}
+plot(co2NA$Year,co2NA$Natural.gas, xlab = "Year", ylab= "Natural Gas", main = "CO2 Emissions by Natural Gas", col = "dodgerblue3")
+abline(modelGas, col = "darkorchid2", lty = 2) #regression line
+lines(lowess(co2NA$Year, co2NA$Gas), col = "darkseagreen4")
+legend(1990, 1800, legend = c("Oil", "Regression"), col = c("dodgerblue3","darkorchid2"), lty=1:2, cex=0.8)
+```
+
+Discrete Models
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
